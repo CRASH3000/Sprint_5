@@ -1,24 +1,8 @@
-import pytest
 import time
-from selenium import webdriver
-from selenium.common import TimeoutException
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators import Locators
 
-@pytest.fixture(scope="module")
-def driver():
-    # Настраиваем WebDriver с использованием webdriver_manager
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    yield driver
-    driver.quit()
-
-@pytest.fixture(scope="module")
-def page_url():
-    return "https://stellarburgers.nomoreparties.site/"
 
 def test_login_and_profile_access(driver, page_url):
     driver.get(page_url)
@@ -36,7 +20,9 @@ def test_login_and_profile_access(driver, page_url):
     WebDriverWait(driver, 5).until(
         EC.url_to_be("https://stellarburgers.nomoreparties.site/login")
     )
-    assert driver.current_url == "https://stellarburgers.nomoreparties.site/login", "Переход на страницу логина не произошел"
+    assert (
+        driver.current_url == "https://stellarburgers.nomoreparties.site/login"
+    ), "Переход на страницу логина не произошел"
 
     # Заполняем поля логина
     email_field = WebDriverWait(driver, 5).until(
@@ -56,7 +42,9 @@ def test_login_and_profile_access(driver, page_url):
     WebDriverWait(driver, 5).until(
         EC.url_to_be("https://stellarburgers.nomoreparties.site/")
     )
-    assert driver.current_url == "https://stellarburgers.nomoreparties.site/", "Переход на главную страницу не произошел"
+    assert (
+        driver.current_url == "https://stellarburgers.nomoreparties.site/"
+    ), "Переход на главную страницу не произошел"
 
     # Кликаем на кнопку "Личный кабинет" повторно
     account_button = WebDriverWait(driver, 5).until(
@@ -69,4 +57,7 @@ def test_login_and_profile_access(driver, page_url):
     WebDriverWait(driver, 5).until(
         EC.url_to_be("https://stellarburgers.nomoreparties.site/account/profile")
     )
-    assert driver.current_url == "https://stellarburgers.nomoreparties.site/account/profile", "Переход на страницу профиля не произошел"
+    assert (
+        driver.current_url
+        == "https://stellarburgers.nomoreparties.site/account/profile"
+    ), "Переход на страницу профиля не произошел"
