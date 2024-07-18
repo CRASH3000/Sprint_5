@@ -8,19 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators import Locators
-
-
-@pytest.fixture(scope="module")
-def driver():
-    # Настраиваем WebDriver с использованием webdriver_manager
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    yield driver
-    driver.quit()
-
-
-@pytest.fixture(scope="module")
-def page_url():
-    return "https://stellarburgers.nomoreparties.site/"
+from config.test_account import TestAccount
 
 
 def test_page_load(driver, page_url):
@@ -66,13 +54,13 @@ def test_new_profile_registration(driver, page_url):
     name_field = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located(Locators.NAME_FIELD)
     )
-    name_field.send_keys("Тестовое Имя1")
+    name_field.send_keys(TestAccount.LOGIN)
 
     email_field = driver.find_element(*Locators.EMAIL_FIELD)
-    email_field.send_keys("test30011@mail.com")
+    email_field.send_keys(TestAccount.EMAIL)
 
     password_field = driver.find_element(*Locators.PASSWORD_FIELD)
-    password_field.send_keys("B1234567b1")
+    password_field.send_keys(TestAccount.PASSWORD)
 
     # Нажимаем на кнопку "Зарегистрироваться"
     submit_button = driver.find_element(*Locators.SUBMIT_BUTTON)
